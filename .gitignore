@@ -1,0 +1,15 @@
+# Node
+node_modules
+dist
+
+# Python
+.venv
+__pycache__
+
+# macOS
+.DS_Store
+
+# Env
+.env
+.env.*
+service_account.json
