@@ -5,8 +5,6 @@ type Task = { id: string; title: string; notes?: string };
 const demo: Task[] = [
   { id: "task1", title: "study", notes: "" },
   { id: "task2", title: "landary", notes: "" },
-  { id: "task3", title: "workout", notes: "" },
-  { id: "task4", title: "phone call", notes: "" },
 ];
 
 export default function App() {
