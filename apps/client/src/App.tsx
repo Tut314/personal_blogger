@@ -7,9 +7,22 @@ const demo: Task[] = [
   { id: "task2", title: "landary", notes: "" },
 ];
 
-export default function App() {
-  const [tasks] = useState<Task[]>(demo);
+const uid = () =>
+  (crypto as any).randomUUID?.() ?? Math.random().toString(36).slice(2, 10);
 
+export default function App() {
+  const [tasks, setTasks] = useState<Task[]>(demo);
+
+  function addTask() {
+    const title = prompt("Task title");
+    if (!title || !title.trim()) return;
+    const notes = prompt("Notes(optional)") ?? "";
+
+    setTasks((prev) => [
+      ...prev,
+      { id: uid(), title: title.trim(), notes: notes.trim() },
+    ]);
+  }
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b shadow-sm">
@@ -21,8 +34,8 @@ export default function App() {
       <main className="max-w-3xl mx-auto px-4 py-6">
         <div className="rounded-2xl border bg-white p-4">
           <div className="grid grid-cols-[1fr,2fr,auto] font-semibold text-gray-700 pb-2 border-b">
-            <div>Task ID</div>
             <div>Title</div>
+            <div>Notes</div>
             <div>Actions</div>
           </div>
 
@@ -32,8 +45,8 @@ export default function App() {
                 key={t.id}
                 className="grid grid-cols-[1fr,2fr,auto] items-center py-3 gap-3"
               >
-                <div className="font-mono text-blue-700">{t.id}</div>
-                <div>{t.title}</div>
+                <div className="font-mono">{t.title}</div>
+                <div className="text-gray-600">{t.notes ?? ""}</div>
                 <div className="flex gap-2">
                   <button className="px-2 py-1 rounded-lg border">
                     ✏️ Edit
@@ -47,7 +60,10 @@ export default function App() {
           </div>
 
           <div className="flex justify-end mt-4">
-            <button className="px-3 py-2 rounded-lg bg-blue-600 text-white">
+            <button
+              onClick={addTask}
+              className="px-3 py-2 rounded-lg bg-blue-600"
+            >
               ＋ New
             </button>
           </div>
