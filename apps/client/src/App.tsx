@@ -23,6 +23,25 @@ export default function App() {
       { id: uid(), title: title.trim(), notes: notes.trim() },
     ]);
   }
+
+  function editTask(target: Task) {
+    const nextTitle = prompt("Edit title", target.title);
+    if (nextTitle === null) return;
+
+    const nextNotes = prompt("Edit notes(optional)", target.notes ?? "");
+    if (nextNotes === null) return;
+
+    const t = nextTitle.trim();
+    const n = nextNotes.trim();
+
+    if (!t) return;
+
+    setTasks((prev) =>
+      prev.map((item) =>
+        item.id === target.id ? { ...item, title: t, notes: n } : item
+      )
+    );
+  }
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b shadow-sm">
@@ -48,7 +67,10 @@ export default function App() {
                 <div className="font-mono">{t.title}</div>
                 <div className="text-gray-600">{t.notes ?? ""}</div>
                 <div className="flex gap-2">
-                  <button className="px-2 py-1 rounded-lg border">
+                  <button
+                    className="px-2 py-1 rounded-lg border"
+                    onClick={() => editTask(t)}
+                  >
                     ✏️ Edit
                   </button>
                   <button className="px-2 py-1 rounded-lg border">
