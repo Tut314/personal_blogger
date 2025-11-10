@@ -42,6 +42,13 @@ export default function App() {
       )
     );
   }
+
+  function deleteTask(target: Task) {
+    if (!confirm(`Delete task "${target.title}"?`)) return;
+
+    setTasks((prev) => prev.filter((item) => item.id !== target.id));
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b shadow-sm">
@@ -73,7 +80,10 @@ export default function App() {
                   >
                     ✏️ Edit
                   </button>
-                  <button className="px-2 py-1 rounded-lg border">
+                  <button
+                    className="px-2 py-1 rounded-lg border"
+                    onClick={() => deleteTask(t)}
+                  >
                     🗑️ Delete
                   </button>
                 </div>
