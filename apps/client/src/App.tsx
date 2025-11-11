@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { loadTasks, saveTasks } from "./lib/storage";
 
 type Task = { id: string; title: string; notes?: string };
 
@@ -11,7 +12,13 @@ const uid = () =>
   (crypto as any).randomUUID?.() ?? Math.random().toString(36).slice(2, 10);
 
 export default function App() {
-  const [tasks, setTasks] = useState<Task[]>(demo);
+  const [tasks, setTasks] = useState<Task[]>(() => {
+    const loaded = loadTasks<Task>();
+    return loaded.length ? loaded : demo;
+  });
+  useEffect(() => {
+    saveTasks(tasks);
+  }, [tasks]);
 
   function addTask() {
     const title = prompt("Task title");
