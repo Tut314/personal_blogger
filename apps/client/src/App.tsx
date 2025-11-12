@@ -13,8 +13,8 @@ const uid = () =>
 
 export default function App() {
   const [tasks, setTasks] = useState<Task[]>(() => {
-    const loaded = loadTasks<Task>();
-    return loaded.length ? loaded : demo;
+    const stored = loadTasks<Task>();
+    return stored !== null ? stored : demo;
   });
   useEffect(() => {
     saveTasks(tasks);
@@ -54,6 +54,11 @@ export default function App() {
     if (!confirm(`Delete task "${target.title}"?`)) return;
 
     setTasks((prev) => prev.filter((item) => item.id !== target.id));
+  }
+
+  function clearAll() {
+    if (!confirm("Clear all tasks?")) return;
+    setTasks([]);
   }
 
   return (
@@ -99,6 +104,12 @@ export default function App() {
           </div>
 
           <div className="flex justify-end mt-4">
+            <button
+              onClick={clearAll}
+              className="px-3 py-2 rounded-lg border text-red-600 hover:bg-red-50"
+            >
+              Clear All
+            </button>
             <button
               onClick={addTask}
               className="px-3 py-2 rounded-lg bg-blue-600"

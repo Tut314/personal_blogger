@@ -3,7 +3,7 @@ const KEY = "tm.tasks.v1";
 export function loadTasks<T>() {
   try {
     const raw = localStorage.getItem(KEY);
-    if (!raw) return [];
+    if (raw === null) return [];
     return JSON.parse(raw) as T[];
   } catch {
     console.warn("Failed to parse localStorage data");
