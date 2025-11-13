@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { loadTasks, saveTasks } from "./lib/storage";
 
 type Task = { id: string; title: string; notes?: string };
@@ -16,6 +16,19 @@ export default function App() {
     const stored = loadTasks<Task>();
     return stored !== null ? stored : demo;
   });
+
+  const [query, setQuery] = useState("");
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return tasks;
+    return tasks.filter(
+      (t) =>
+        t.title.toLowerCase().includes(q) ||
+        (t.notes ?? "").toLowerCase().includes(q)
+    );
+  }, [tasks, query]);
+
   useEffect(() => {
     saveTasks(tasks);
   }, [tasks]);
@@ -64,8 +77,14 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b shadow-sm">
-        <div className="max-w-3xl mx-auto px-4 py-4">
-          <h1 className="text-2xl font-bold">Task Manager</h1>
+        <div className="max-w-3xl mx-auto px-4 py-4 flex items-center gap-3">
+          <h1 className="text-2xl font-bold flex-1">Task Manager</h1>
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search title or notes..."
+            className="w-64 rounded-lg border px-3 py-2 outline-none"
+          />
         </div>
       </header>
 
@@ -78,7 +97,7 @@ export default function App() {
           </div>
 
           <div className="divide-y">
-            {tasks.map((t) => (
+            {filtered.map((t) => (
               <div
                 key={t.id}
                 className="grid grid-cols-[1fr,2fr,auto] items-center py-3 gap-3"
