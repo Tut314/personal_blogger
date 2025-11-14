@@ -95,8 +95,17 @@ export default function App() {
             <div>Notes</div>
             <div>Actions</div>
           </div>
+          <div className="text-sm text-gray-500 mb-2">
+            Showing {filtered.length} / {tasks.length} tasks
+          </div>
 
           <div className="divide-y">
+            {filtered.length === 0 && (
+              <div className="py-6 text-center text-gray-500">
+                No tasks match your search.
+              </div>
+            )}
+
             {filtered.map((t) => (
               <div
                 key={t.id}
